@@ -8,6 +8,6 @@ class ReviewForm(forms.Form):
     })
 
     review_text = forms.CharField(
-        label="Your Feedback", widget=forms.Textarea, max_length=1, min_length=5)
+        label="Your Feedback", widget=forms.Textarea)
 
     rating = forms.IntegerField(label="Your rating", min_value=1, max_value=5)
