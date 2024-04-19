@@ -4,31 +4,41 @@ from django.http import HttpResponseRedirect
 from django import views
 from django.views.generic.base import TemplateView
 from django.views.generic import ListView, DetailView
+from django.views.generic.edit import FormView, CreateView
 from .forms import ReviewForm
 from .models import Review
 # Create your views here.
 
 
-class reviewView(views.View):
-    def get(self, request):
-        form = ReviewForm()
+class reviewView(CreateView):
+    model = Review
+    form_class = ReviewForm
+    template_name = "reviews/review.html"
+    success_url = "/thank-you"
 
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    # def form_valid(self, form):
+    #     form.save()
+    #     return super().form_valid(form)
 
-    def post(self, request):
-        form = ReviewForm(request.POST)
+    # def get(self, request):
+    #     form = ReviewForm()
 
-        if form.is_valid():
-            print(form.cleaned_data)
-            form.save()
+    #     return render(request, "reviews/review.html", {
+    #         "form": form
+    #     })
 
-            return HttpResponseRedirect("/thank-you")
+    # def post(self, request):
+    #     form = ReviewForm(request.POST)
 
-        return render(request, "reviews/review.html", {
-            "form": form
-        })
+    #     if form.is_valid():
+    #         print(form.cleaned_data)
+    #         form.save()
+
+    #         return HttpResponseRedirect("/thank-you")
+
+    #     return render(request, "reviews/review.html", {
+    #         "form": form
+    #     })
 
 
 class thankYouView(TemplateView):
@@ -50,7 +60,7 @@ class reviewsList(ListView):
 
     # def get_queryset(self):
     #     superQuery = super().get_queryset()
-        
+
     #     return superQuery.filter(rating__gt=3)
 
 
