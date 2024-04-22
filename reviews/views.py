@@ -68,12 +68,22 @@ class reviewDisplay(DetailView):
     template_name = "reviews/review_display.html"
     model = Review
 
-    # def get_context_data(self, **kwargs: Any):
-    #     context = super().get_context_data(**kwargs)
+    def get_context_data(self, **kwargs: Any):
+        context = super().get_context_data(**kwargs)
 
-    #     review_id = kwargs["review_id"]
-    #     review = Review.objects.get(pk=review_id)
+        loaded_review = self.object
 
-    #     context["review"] = review
+        session_details = self.request
 
-    #     return context
+        session_review_id = session_details.session.get('fav_rev')
+
+        context["is_favourite"] = session_review_id == str(loaded_review.id)
+
+        return context
+
+
+class reviewFavourite(views.View):
+    def post(self, request):
+        review_id = request.POST['review_id']
+        request.session['fav_rev'] = review_id
+        return HttpResponseRedirect("/review/"+review_id)
